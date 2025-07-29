@@ -9,7 +9,7 @@
         /* Custom styles for the app */
         body {
             font-family: 'Inter', sans-serif;
-            background-colour: #f0f4f8; /* Light blue-grey background */
+            background-color: #f0f4f8; /* Light blue-grey background */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -20,7 +20,7 @@
         }
 
         .container {
-            background-colour: #ffffff; /* White background for the card */
+            background-color: #ffffff; /* White background for the card */
             border-radius: 1.5rem; /* More rounded corners */
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Soft shadow */
             padding: 2rem;
@@ -35,41 +35,57 @@
         .question-text {
             font-size: 1.5rem; /* Larger font for questions */
             font-weight: 600; /* Semi-bold */
-            colour: #334155; /* Darker text colour */
+            color: #334155; /* Darker text color */
             min-height: 4rem; /* Ensure consistent height for question display */
             display: flex;
             align-items: center;
             justify-content: center;
+            background-color: #e0e7ff; /* Light blue background for question */
+            padding: 1rem;
+            border-radius: 0.75rem;
         }
 
         .answer-text {
             font-size: 2.5rem; /* Very large font for answers */
             font-weight: 800; /* Extra bold */
-            colour: #ef4444; /* Red colour for emphasis */
+            color: #ef4444; /* Red color for emphasis */
             margin-top: 1rem;
             display: none; /* Hidden by default */
+            background-color: #ffe0e0; /* Light red background for answer */
+            padding: 1rem;
+            border-radius: 0.75rem;
         }
 
         .action-button {
-            background-colour: #4f46e5; /* Indigo */
-            colour: white;
+            background-color: #4f46e5; /* Indigo */
+            color: white;
             padding: 0.8rem 1.5rem;
             border-radius: 0.75rem; /* Rounded corners for buttons */
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background-colour 0.3s ease, transform 0.2s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
             border: none;
             box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3); /* Shadow for buttons */
         }
 
         .action-button:hover {
-            background-colour: #4338ca; /* Darker indigo on hover */
+            background-color: #4338ca; /* Darker indigo on hover */
             transform: translateY(-2px); /* Slight lift effect */
         }
 
         .action-button:active {
             transform: translateY(0); /* Press effect */
+        }
+
+        /* Message Box Styling */
+        #message-box {
+            margin-top: 1.5rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
         }
 
         /* Responsive adjustments */
@@ -109,60 +125,64 @@
         <button id="newQuestionBtn" class="action-button mt-4">
             New Question
         </button>
+
+        <!-- Message Box for user feedback -->
+        <div id="message-box" class="hidden"></div>
     </div>
 
     <script>
         // Array of random questions
         const questions = [
             "Where were you at the time of the incident?",
-	    "What is your full name?",
-	    "Do you understand why I am talking to you?",
-	    "Do you understand your rights?",
-	    "What is your relationship to the victim?",
-	    "Can you describe the events leading up to the incident?",
-	    "What time did the incident occur?",
-	    "What is your date of birth?",
-	    "What is your address?",
-	    "What is your phone number?",
-	    "Are you currently under the influence of any drugs or alcohol?",
-	    "Do you have any prior convictions?",
-	    "Can you describe your activities today?",
-	    "Do you know anyone else who was at the scene?",
-	    "Do you know the difference between right and wrong?",
-	    "Do you own a gun?",
-	    "What are you not telling us?",
-	    "What did you see, hear, and do in the hour before you were arrested?",
-	    "What did you do after you left the scene?",
-	    "What was your purpose in being at that location at that time?",
-	    "What were you wearing when you left Your home this morning?",
-	    "Did you see any weapons at the location before you were taken into custody?",
-	    "Did you see anything being taken from that location?",
-	    "Was anyone injured during the incident?",
-	    "Do you have a licence to carry a firearm?",
-	    "Did you go to that location yesterday morning with the intention of harming someone?",
-	    "Do you regret your actions?",
-	    "Tell me in your own words: Why do you think this thing happened?",
-	    "Do you regret your actions?",
-	    "Do you know anything else that might be of help to our investigation?",
-	    "Did you act alone?",
-	    "Do you know why someone might want to harm the victim?",
-	    "Was there any prior conflict between you and the victim?",
-	    "Do you understand the consequences of your actions?",
+            "What is your full name?",
+            "Do you understand why I am talking to you?",
+            "Do you understand your rights?",
+            "What is your relationship to the victim?",
+            "Can you describe the events leading up to the incident?",
+            "What time did the incident occur?",
+            "What is your date of birth?",
+            "What is your address?",
+            "What is your phone number?",
+            "Are you currently under the influence of any drugs or alcohol?",
+            "Do you have any prior convictions?",
+            "Can you describe your activities today?",
+            "Do you know anyone else who was at the scene?",
+            "Do you know the difference between right and wrong?",
+            "Do you own a gun?",
+            "What are you not telling us?",
+            "What did you see, hear, and do in the hour before you were arrested?",
+            "What did you do after you left the scene?",
+            "What was your purpose in being at that location at that time?",
+            "What were you wearing when you left Your home this morning?",
+            "Did you see any weapons at the location before you were taken into custody?",
+            "Did you see anything being taken from that location?",
+            "Was anyone injured during the incident?",
+            "Do you have a licence to carry a firearm?",
+            "Did you go to that location yesterday morning with the intention of harming someone?",
+            "Do you regret your actions?",
+            "Tell me in your own words: Why do you think this thing happened?",
+            "Do you regret your actions?", // Duplicate, but kept as per your array
+            "Do you know anything else that might be of help to our investigation?",
+            "Did you act alone?",
+            "Do you know why someone might want to harm the victim?",
+            "Was there any prior conflict between you and the victim?",
+            "Do you understand the consequences of your actions?",
         ];
 
         // Array of random answers
         const answers = [
             "YOU SUCK! You know that?",
-	    "Bite me!",
+            "Bite me!",
             "Fuck you, PIG!",
             "Let me outta here!",
             "Now, Lemme see now ... WHY DONT YOU SUCK MY DICK!",
-	    "Ass Hole!",
-	    "I like your wife, boy scout. Oooh yeah! She knows what I like!",
-	    "Butt Wipe!",
-	    "Does the city know their taxes are being wasted giving morons like you a job!",
-	    "You'll get nothing from me Dickwad!",
-	    "Your mother!",
+            "Ass Hole!",
+            "Are you a fag, officer? You look like a fag! You have a fag's voice. I love it. Ask me another question!",
+            "I like your wife, boy scout. Oooh yeah! She knows what I like!",
+            "Butt Wipe!",
+            "Does the city know their taxes are being wasted giving morons like you a job!",
+            "You'll get nothing from me Dickwad!",
+            "Your mother!",
             "You got no right to keep me here, you Jerkoff!"
         ];
 
@@ -171,44 +191,110 @@
         const revealAnswerBtn = document.getElementById('revealAnswerBtn');
         const answerDisplay = document.getElementById('answerDisplay');
         const newQuestionBtn = document.getElementById('newQuestionBtn');
+        const messageBox = document.getElementById('message-box'); // Reference to the message box
 
-        let currentQuestionIndex = -1; // To keep track of the current question
+        let availableQuestionIndices = []; // Pool of questions not yet asked in the current cycle
+        let availableAnswerIndices = [];  // Pool of answers not yet revealed in the current cycle
 
         /**
-         * Displays a random question from the 'questions' array.
-         * Ensures the answer is hidden and the "Reveal Answer" button is visible.
+         * Displays a message to the user in a styled box.
+         * @param {string} message - The message to display.
+         * @param {string} type - 'info', 'warning', 'error'. Determines styling.
          */
-        function displayRandomQuestion() {
-            // Hide the answer and show the reveal button
-            answerDisplay.style.display = 'none';
-            revealAnswerBtn.style.display = 'block';
-
-            // Get a random index for the question
-            let randomIndex;
-            do {
-                randomIndex = Math.floor(Math.random() * questions.length);
-            } while (randomIndex === currentQuestionIndex && questions.length > 1); // Avoid repeating the same question if possible
-
-            currentQuestionIndex = randomIndex;
-            questionDisplay.textContent = questions[currentQuestionIndex];
+        function showMessage(message, type = 'info') {
+            messageBox.textContent = message;
+            messageBox.classList.remove('hidden', 'bg-yellow-100', 'text-yellow-800', 'bg-red-100', 'text-red-800', 'bg-blue-100', 'text-blue-800');
+            if (type === 'warning') {
+                messageBox.classList.add('bg-yellow-100', 'text-yellow-800');
+            } else if (type === 'error') {
+                messageBox.classList.add('bg-red-100', 'text-red-800');
+            } else { // info
+                messageBox.classList.add('bg-blue-100', 'text-blue-800');
+            }
+            messageBox.classList.remove('hidden'); // Ensure it's visible
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 3000); // Hide after 3 seconds
         }
 
         /**
-         * Reveals a random answer and hides the "Reveal Answer" button.
+         * Shuffles an array in place using the Fisher-Yates (Knuth) algorithm.
+         * @param {Array} array - The array to shuffle.
+         * @returns {Array} The shuffled array.
+         */
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            }
+            return array;
+        }
+
+        /**
+         * Initialises or resets the pool of available question indices.
+         */
+        function resetQuestionPool() {
+            availableQuestionIndices = Array.from({ length: questions.length }, (_, i) => i);
+            shuffleArray(availableQuestionIndices); // Randomise the order
+            showMessage("All questions asked! Starting a new round.", 'info');
+        }
+
+        /**
+         * Initialises or resets the pool of available answer indices.
+         */
+        function resetAnswerPool() {
+            availableAnswerIndices = Array.from({ length: answers.length }, (_, i) => i);
+            shuffleArray(availableAnswerIndices); // Randomise the order
+            // Only show message if it's not the very first time resetting, or if answers were already displayed
+            if (answerDisplay.style.display === 'block' || availableAnswerIndices.length < answers.length) {
+                showMessage("All answers revealed! Cycling through them again.", 'info');
+            }
+        }
+
+        /**
+         * Displays the next question from the shuffled pool.
+         */
+        function displayNextQuestion() {
+            // If all questions have been asked, reset the pool
+            if (availableQuestionIndices.length === 0) {
+                resetQuestionPool();
+            }
+
+            // Get the next random question index from the pool
+            const nextQuestionIdx = availableQuestionIndices.pop(); // Pop removes from end, but array is shuffled
+
+            questionDisplay.textContent = questions[nextQuestionIdx];
+            answerDisplay.style.display = 'none'; // Hide previous answer
+            revealAnswerBtn.style.display = 'block'; // Show reveal button
+
+            // Reset the answer pool for the new question cycle
+            resetAnswerPool();
+        }
+
+        /**
+         * Reveals the next answer from the shuffled pool.
          */
         function revealAnswer() {
-            const randomAnswerIndex = Math.floor(Math.random() * answers.length);
-            answerDisplay.textContent = answers[randomAnswerIndex]; // Set the random answer
+            if (availableAnswerIndices.length === 0) {
+                resetAnswerPool(); // If all answers revealed, reset pool
+            }
+
+            const nextAnswerIdx = availableAnswerIndices.pop(); // Get next random answer
+            answerDisplay.textContent = answers[nextAnswerIdx];
             answerDisplay.style.display = 'block'; // Show the answer
             revealAnswerBtn.style.display = 'none'; // Hide the reveal button
         }
 
         // Event Listeners
         revealAnswerBtn.addEventListener('click', revealAnswer);
-        newQuestionBtn.addEventListener('click', displayRandomQuestion);
+        newQuestionBtn.addEventListener('click', displayNextQuestion);
 
-        // Initial call to display a question when the page loads
-        window.onload = displayRandomQuestion;
+        // Initial setup on load
+        window.onload = function() {
+            resetQuestionPool(); // Populate the initial question pool
+            resetAnswerPool();   // Populate the initial answer pool
+            displayNextQuestion(); // Display the first question
+        };
     </script>
 </body>
 </html>
