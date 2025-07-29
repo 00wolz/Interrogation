@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Question App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the app */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-colour: #f0f4f8; /* Light blue-grey background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Full viewport height */
+            margin: 0;
+            padding: 1rem; /* Padding around the content */
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-colour: #ffffff; /* White background for the card */
+            border-radius: 1.5rem; /* More rounded corners */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Soft shadow */
+            padding: 2rem;
+            max-width: 90%; /* Max width for responsiveness */
+            width: 500px; /* Fixed width for larger screens */
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem; /* Space between elements */
+        }
+
+        .question-text {
+            font-size: 1.5rem; /* Larger font for questions */
+            font-weight: 600; /* Semi-bold */
+            colour: #334155; /* Darker text colour */
+            min-height: 4rem; /* Ensure consistent height for question display */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .answer-text {
+            font-size: 2.5rem; /* Very large font for answers */
+            font-weight: 800; /* Extra bold */
+            colour: #ef4444; /* Red colour for emphasis */
+            margin-top: 1rem;
+            display: none; /* Hidden by default */
+        }
+
+        .action-button {
+            background-colour: #4f46e5; /* Indigo */
+            colour: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.75rem; /* Rounded corners for buttons */
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-colour 0.3s ease, transform 0.2s ease;
+            border: none;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3); /* Shadow for buttons */
+        }
+
+        .action-button:hover {
+            background-colour: #4338ca; /* Darker indigo on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        .action-button:active {
+            transform: translateY(0); /* Press effect */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .container {
+                padding: 1.5rem;
+                gap: 1rem;
+            }
+            .question-text {
+                font-size: 1.25rem;
+                min-height: 3rem;
+            }
+            .answer-text {
+                font-size: 2rem;
+            }
+            .action-button {
+                font-size: 1rem;
+                padding: 0.7rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="questionDisplay" class="question-text">
+            Click "New Question" to start!
+        </div>
+
+        <button id="revealAnswerBtn" class="action-button">
+            Reveal Answer
+        </button>
+
+        <div id="answerDisplay" class="answer-text">
+            YOU SUCK!
+        </div>
+
+        <button id="newQuestionBtn" class="action-button mt-4">
+            New Question
+        </button>
+    </div>
+
+    <script>
+        // Array of random questions
+        const questions = [
+            "Where were you at the time of the incident?",
+	    "What is your full name?",
+	    "Do you understand why I am talking to you?",
+	    "Do you understand your rights?",
+	    "What is your relationship to the victim?",
+	    "Can you describe the events leading up to the incident?",
+	    "What time did the incident occur?",
+	    "What is your date of birth?",
+	    "What is your address?",
+	    "What is your phone number?",
+	    "Are you currently under the influence of any drugs or alcohol?",
+	    "Do you have any prior convictions?",
+	    "Can you describe your activities today?",
+	    "Do you know anyone else who was at the scene?",
+	    "Do you know the difference between right and wrong?",
+	    "Do you own a gun?",
+	    "What are you not telling us?",
+	    "What did you see, hear, and do in the hour before you were arrested?",
+	    "What did you do after you left the scene?",
+	    "What was your purpose in being at that location at that time?",
+	    "What were you wearing when you left Your home this morning?",
+	    "Did you see any weapons at the location before you were taken into custody?",
+	    "Did you see anything being taken from that location?",
+	    "Was anyone injured during the incident?",
+	    "Do you have a licence to carry a firearm?",
+	    "Did you go to that location yesterday morning with the intention of harming someone?",
+	    "Do you regret your actions?",
+	    "Tell me in your own words: Why do you think this thing happened?",
+	    "Do you regret your actions?",
+	    "Do you know anything else that might be of help to our investigation?",
+	    "Did you act alone?",
+	    "Do you know why someone might want to harm the victim?",
+	    "Was there any prior conflict between you and the victim?",
+	    "Do you understand the consequences of your actions?",
+        ];
+
+        // Array of random answers
+        const answers = [
+            "YOU SUCK! You know that?",
+	    "Bite me!",
+            "Fuck you, PIG!",
+            "Let me outta here!",
+            "Now, Lemme see now ... WHY DONT YOU SUCK MY DICK!",
+	    "Ass Hole!",
+	    "I like your wife, boy scout. Oooh yeah! She knows what I like!",
+	    "Butt Wipe!",
+	    "Does the city know their taxes are being wasted giving morons like you a job!",
+	    "You'll get nothing from me Dickwad!",
+	    "Your mother!",
+            "You got no right to keep me here, you Jerkoff!"
+        ];
+
+        // Get references to HTML elements
+        const questionDisplay = document.getElementById('questionDisplay');
+        const revealAnswerBtn = document.getElementById('revealAnswerBtn');
+        const answerDisplay = document.getElementById('answerDisplay');
+        const newQuestionBtn = document.getElementById('newQuestionBtn');
+
+        let currentQuestionIndex = -1; // To keep track of the current question
+
+        /**
+         * Displays a random question from the 'questions' array.
+         * Ensures the answer is hidden and the "Reveal Answer" button is visible.
+         */
+        function displayRandomQuestion() {
+            // Hide the answer and show the reveal button
+            answerDisplay.style.display = 'none';
+            revealAnswerBtn.style.display = 'block';
+
+            // Get a random index for the question
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * questions.length);
+            } while (randomIndex === currentQuestionIndex && questions.length > 1); // Avoid repeating the same question if possible
+
+            currentQuestionIndex = randomIndex;
+            questionDisplay.textContent = questions[currentQuestionIndex];
+        }
+
+        /**
+         * Reveals a random answer and hides the "Reveal Answer" button.
+         */
+        function revealAnswer() {
+            const randomAnswerIndex = Math.floor(Math.random() * answers.length);
+            answerDisplay.textContent = answers[randomAnswerIndex]; // Set the random answer
+            answerDisplay.style.display = 'block'; // Show the answer
+            revealAnswerBtn.style.display = 'none'; // Hide the reveal button
+        }
+
+        // Event Listeners
+        revealAnswerBtn.addEventListener('click', revealAnswer);
+        newQuestionBtn.addEventListener('click', displayRandomQuestion);
+
+        // Initial call to display a question when the page loads
+        window.onload = displayRandomQuestion;
+    </script>
+</body>
+</html>
